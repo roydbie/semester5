@@ -17,3 +17,6 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::get('/backend/getAlleWerkorders', [App\Http\Controllers\WerkorderController::class, 'getAlleWerkorders'])->name('werkorders');
+
