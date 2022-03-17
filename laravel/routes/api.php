@@ -1,22 +1,14 @@
 <?php
 
+use App\Http\Controllers\LocatieController;
+use App\Http\Controllers\WerkorderController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| is assigned the "api" middleware group. Enjoy building your API!
-|
-*/
+Route::get('/backend/getAlleWerkorders', [WerkorderController::class, 'getAlleWerkorders'])->name('werkorders');
+Route::get('/backend/getStatusFromStatusId/{status_id}', [WerkorderController::class, 'getStatusFromStatusId'])->name('werkorders');
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+Route::get('/backend/getAlleLocaties', [LocatieController::class, 'getAlleLocaties'])->name('werkorders');
 
-Route::get('/backend/getAlleWerkorders', [App\Http\Controllers\WerkorderController::class, 'getAlleWerkorders'])->name('werkorders');
+
 

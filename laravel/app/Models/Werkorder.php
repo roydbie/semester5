@@ -17,9 +17,4 @@ class Werkorder extends Model
         'status_id',
         'locatie_id'
     ];
-
-    public static function create(array $array)
-    {
-
-    }
 }

@@ -92,6 +92,6 @@ a:hover {
   height:80vh;
   display: block;
   padding:20px;
-  overflow: auto;
+  overflow: hidden;
 }
 </style>

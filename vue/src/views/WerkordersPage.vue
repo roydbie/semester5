@@ -1,6 +1,35 @@
 <template>
-  <div class="tabel-container mt-3">
-    <b-table striped hover :items="items"></b-table>
+  <div style="height:100%;">
+    <div class="button-container">
+      <b-button variant="success">Nieuw werkorder</b-button>
+      <b-button variant="warning">Filter werkorders</b-button>
+    </div>
+    <div class="tabel-container mt-3">
+      <b-spinner v-if="loadingWerkorders === true" style="width: 2rem; height: 2rem;margin-left:49%;margin-bottom:20px;"></b-spinner>
+      <b-table
+          v-else
+          striped
+          hover
+          :items="items"
+          :fields="fields"
+          sticky-header="100%"
+          class="table-class"
+          label-sort-asc=""
+          label-sort-desc=""
+          label-sort-clear=""
+      >
+        <template #cell(locatie_id)="row">
+          <select class="form-select">
+            {{row.value}}
+            <option v-for="item in locaties" v-bind:key="item.id" :value="item.id" selected>
+              {{ item.locatie }}
+            </option>
+          </select>
+        </template>
+      </b-table>
+    </div>
+
+    {{locaties}}
   </div>
 </template>
 
@@ -10,31 +39,49 @@ import axios from 'axios';
 export default {
   data() {
     return {
-      items: [
-        { age: 40, first_name: 'Dickerson', last_name: 'Macdonald' },
-        { age: 21, first_name: 'Larsen', last_name: 'Shaw' },
-        { age: 89, first_name: 'Geneva', last_name: 'Wilson' },
-        { age: 38, first_name: 'Jami', last_name: 'Carney' }
+      items: [],
+      fields: [
+        { key: "id", label: "ID", sortable: false},
+        { key: "omschrijving", label: "Omschrijving", sortable: false },
+        { key: "aanmaakdatum", label: "Aanmaakdatum", sortable: true },
+        { key: "aanmaaktijd", label: "Aanmaaktijd", sortable: false },
+        { key: "plandatum", label: "Plandatum", sortable: true },
+        { key: "plantijd", label: "Plantijd", sortable: false },
+        { key: "status_id", label: "Status id", sortable: true },
+        { key: "locatie_id", label: "Locatie id", sortable: true },
+
       ],
       loadingWerkorders: false,
-      werkorders: []
+      locaties: []
     }
   },
   mounted() {
     this.getAlleWerkorders();
+    this.getAlleLocaties();
   },
   methods: {
-    async api() {
+    async api(url) {
       try {
-        const res = await axios.get(`${process.env.VUE_APP_BASE_URL}getAlleWerkorders`);
+        const res = await axios.get(`${process.env.VUE_APP_BASE_URL}${url}`);
         return await res.data;
       } catch (e) { return e; }
     },
     getAlleWerkorders() {
       this.loadingWerkorders = true;
-      let data = this.api();
+      let data = this.api("getAlleWerkorders");
       data.then(result => {
-        console.log(result);
+        for (let i = 0; i < Object.keys(result).length; i++) {
+          this.items.push(result[i]);
+        }
+      }).then(() => this.loadingWerkorders = false);
+    },
+    getAlleLocaties() {
+      this.loadingWerkorders = true;
+      let data = this.api("getAlleLocaties");
+      data.then(result => {
+        for (let i = 0; i < Object.keys(result).length; i++) {
+          this.locaties.push(result[i]);
+        }
       }).then(() => this.loadingWerkorders = false);
     },
   }
@@ -42,8 +89,30 @@ export default {
 </script>
 
 <style scoped>
-.tabel-container {
-  width: 80%;
+.button-container {
   margin:auto;
+}
+
+.button-container .btn {
+  margin-right:5px!important;
+  font-size:0.9rem;
+}
+
+.table-class {
+  border-bottom: 2px solid #dedede;
+  border-top: 2px solid #dedede;
+  cursor:pointer;
+}
+
+.tabel-container {
+  width: 100%;
+  margin:auto;
+  padding:10px;
+  height:90%;
+  max-height:90%;
+}
+
+.form-select {
+  font-size: 0.9rem!important;
 }
 </style>
