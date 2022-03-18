@@ -1,7 +1,7 @@
 <template>
   <div style="height:100%;">
     <div class="button-container">
-      <b-button variant="success">Nieuw werkorder</b-button>
+      <router-link :to="'/werkorders/nieuw'" class="btn btn-success ">Nieuw werkorder</router-link>
       <b-button variant="warning">Filter werkorders</b-button>
     </div>
     <div class="tabel-container mt-3">
@@ -18,18 +18,8 @@
           label-sort-desc=""
           label-sort-clear=""
       >
-        <template #cell(locatie_id)="row">
-          <select class="form-select">
-            {{row.value}}
-            <option v-for="item in locaties" v-bind:key="item.id" :value="item.id" selected>
-              {{ item.locatie }}
-            </option>
-          </select>
-        </template>
       </b-table>
     </div>
-
-    {{locaties}}
   </div>
 </template>
 
@@ -49,7 +39,6 @@ export default {
         { key: "plantijd", label: "Plantijd", sortable: false },
         { key: "status_id", label: "Status id", sortable: true },
         { key: "locatie_id", label: "Locatie id", sortable: true },
-
       ],
       loadingWerkorders: false,
       locaties: []
